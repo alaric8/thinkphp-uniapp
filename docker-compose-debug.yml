@@ -5,9 +5,6 @@ services:
       - "80:80"
     volumes:
      - "./nginx.conf:/etc/nginx/conf.d/default.conf"
-     - "storage:/usr/share/nginx/html/storage:ro"
-     - "h5:/usr/share/nginx/html/h5"
-     - "vue:/usr/share/nginx/html/vue"
     depends_on:
       - app
   app:
@@ -15,9 +12,7 @@ services:
     env_file:
       - ".env"
     volumes:
-      - "./admin:/www/app/admin"
-      - "./api:/www/app/api"
-      - "./common:/www/app/common"
+      - "./workspace/admin:/www/app/admin"
   redis:
     image: redis:latest
   mysql:
@@ -34,40 +29,24 @@ services:
     ports:
       - "5173:5173"
     volumes:
-      - "./vue:/app/src"
+      - "./vue:/app/src/views"
     environment:
       - API_HOST=nginx
     depends_on:
       - app 
       - nginx
       - mysql
-  vue_build:
-     image: ghcr.io/alaric8/lottery-admin:latest
-     command: "npm run build-only"
-     volumes:
-       - "vue:/app/dist"
-       - "./vue:/app/src"
-     depends_on:
-      - nginx
   uniapp:
     image: ghcr.io/alaric8/docker-uniapp:latest
     ports:
       - "5174:5173"
     volumes:
-      - "./uniapp:/app/src"
+      - "./uniapp:/app/src/pages"
     depends_on:
       - vue
       - app 
       - nginx
       - mysql
-  build_uniapp:
-     image: ghcr.io/alaric8/docker-uniapp:latest
-     command: "npm run build:h5"
-     volumes:
-       - "h5:/app/dist/build/h5"
-       - "./uniapp:/app/src"
-     depends_on:
-      - nginx  
 volumes:
   h5:
      driver: local
