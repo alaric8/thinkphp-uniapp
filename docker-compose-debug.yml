@@ -12,14 +12,14 @@ services:
     env_file:
       - ".env"
     volumes:
-      - "./workspace/admin:/www/app/admin"
+      - "./workspace/php/admin:/www/app/admin"
   redis:
     image: redis:latest
   mysql:
     image: mysql:5.7
     restart: always
     ports:
-      - "3306:3306"
+      - "3306"
     env_file:
       - ".env"
     volumes:
@@ -42,6 +42,7 @@ services:
       - "5174:5173"
     volumes:
       - "./workspace/uniapp:/app/src/pages"
+      - "./config/pages.json:/app/src/pages.json"
     depends_on:
       - vue
       - app 
