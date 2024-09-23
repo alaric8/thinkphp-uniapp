@@ -2,5 +2,5 @@
     
 </script>
 <template>
-    example  page 
+     
 </template>
